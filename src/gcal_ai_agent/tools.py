@@ -67,3 +67,31 @@ def get_upcoming_events(max_results: int = 10) -> str:
         output.append(f"{start} - {summary}")
 
     return "\n".join(output)
+
+
+def create_calendar_event(summary: str, start_time: str, end_time: str) -> str:
+    """
+    Creates a new event on the user's primary calendar.
+
+    Args:
+        summary: The title or description of the event.
+        start_time: The start time in ISO format (e.g., '2026-03-05T09:00:00-07:00').
+        end_time: The end time in ISO format (e.g., '2026-03-05T10:00:00-07:00').
+    """
+    service = get_calendar_service()
+
+    event_payload = {
+        "summary": summary,
+        "start": {
+            "dateTime": start_time,
+            "timeZone": "UTC",  # Adjust to your preferred default timezone
+        },
+        "end": {
+            "dateTime": end_time,
+            "timeZone": "UTC",
+        },
+    }
+
+    event = service.events().insert(calendarId="primary", body=event_payload).execute()
+
+    return f"Successfully created event: {event.get('htmlLink')}"
