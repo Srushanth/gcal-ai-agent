@@ -27,3 +27,43 @@ def get_calendar_service():
             token.write(creds.to_json())
 
     return build("calendar", "v3", credentials=creds)
+
+
+def get_upcoming_events(max_results: int = 10) -> str:
+    """
+    Retrieves the upcoming events from the user's primary Google Calendar.
+
+    Args:
+        max_results: The maximum number of events to return.
+    """
+    service = get_calendar_service()
+    import datetime
+
+    # Get current time in ISO format (required by the API)
+    now = datetime.datetime.utcnow().isoformat() + "Z"
+
+    events_result = (
+        service.events()
+        .list(
+            calendarId="primary",
+            timeMin=now,
+            maxResults=max_results,
+            singleEvents=True,
+            orderBy="startTime",
+        )
+        .execute()
+    )
+
+    events = events_result.get("items", [])
+
+    if not events:
+        return "No upcoming events found."
+
+    # Format the events into a readable string for the LLM
+    output = []
+    for event in events:
+        start = event["start"].get("dateTime", event["start"].get("date"))
+        summary = event.get("summary", "No Title")
+        output.append(f"{start} - {summary}")
+
+    return "\n".join(output)
