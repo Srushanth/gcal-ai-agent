@@ -44,6 +44,25 @@ To authenticate the client library with Google Calendar, follow these steps:
 
 _Note: On your first run, the app will open a browser window asking you to log in and authorize the application (via OAuth) to access your calendar. A `token.json` will be saved locally for subsequent runs._
 
+## Testing with ADK Web UI
+
+You can interactively test the agent's behavior using the built-in ADK Web UI.
+
+1. Create a `.env` file inside the `src/` directory.
+2. Add your Gemini API key to the `.env` file:
+   ```env
+   GOOGLE_API_KEY=your_gemini_api_key_here
+   ```
+3. Navigate to the `src` directory.
+4. Run the `adk web` command.
+
+```bash
+cd src
+adk web
+```
+
+5. Open the provided local URL (typically `http://127.0.0.1:8000`) in your browser to start chatting with the `GoogleCalendarAssistant` agent.
+
 ## Usage
 
 You can run the agent and interact with it using Google ADK's native `LlmAgent`.
