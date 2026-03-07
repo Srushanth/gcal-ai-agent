@@ -1,10 +1,8 @@
-from google.adk.agents import LlmAgent
 from google.adk.tools import AgentTool
+from google.adk.agents import LlmAgent
 from gcal_ai_agent.tools import get_upcoming_events
 from gcal_ai_agent.tools import create_calendar_event
 
-# 2. Define the ADK Agent
-# ADK integrates natively with Gemini models, making it seamless to use here.
 formatter_agent = LlmAgent(
     name="EventFormatter",
     model="gemini-2.5-flash",
@@ -17,7 +15,7 @@ formatter_agent = LlmAgent(
 
 root_agent = LlmAgent(
     name="GoogleCalendarAssistant",
-    model="gemini-2.5-flash",  # Native Gemini integration
+    model="gemini-2.5-flash",
     tools=[get_upcoming_events, create_calendar_event, AgentTool(formatter_agent)],
     instruction=(
         "You are an AI scheduling assistant. "
